@@ -8,24 +8,21 @@ int main() {
 
   int N;
   cin >> N; // 1 <= N <= 500,000
-  map<int, int> mp;
+  vector<int> cards(N);
   for (int i = 0; i < N; i++) {
-    int num;
-    cin >> num;
-    if (mp[num]) {
-      mp[num]++;
-    } else {
-      mp[num] = 1;
-    }
+    cin >> cards[i];
   }
+
+  sort(cards.begin(), cards.end());
   
   int M;
   cin >> M;
-  int num[M];
-  for (int i = 0; i < M; i++) cin >> num[i];
-  
+
   for (int i = 0; i < M; i++) {
-    cout << mp[num[i]] << " ";
+    int num;
+    cin >> num;
+
+    cout << upper_bound(cards.begin(), cards.end(), num) - lower_bound(cards.begin(), cards.end(), num) << " ";
   }
   return 0;
 }
