@@ -5,6 +5,8 @@ set(CMAKE_CXX_COMPILER "/opt/homebrew/Cellar/llvm/21.1.8/bin/clang++")
 
 project(algorithm_practice LANGUAGES CXX)
 
+link_directories(/opt/homebrew/Cellar/llvm/21.1.8/lib/c++)
+
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
