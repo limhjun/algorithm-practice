@@ -2,15 +2,16 @@
 
 using namespace std;
 
-int func(int floor, int room) {
-  if (floor == 0) return room;
+int cache[15][15];
 
-  int sum = 0;
-  for (int i = 1; i <= room; i++) {
-    sum += func(floor - 1, i);
-  }
+int func(int k, int n) {
+  if (k == 0) return n;
+  if (n == 1) return 1;
 
-  return sum;
+  int &res = cache[k][n];
+  res = func(k, n - 1) + func(k - 1, n);
+
+  return res;
 }
 
 int main() {
@@ -24,9 +25,7 @@ int main() {
     int k, n;
     cin >> k >> n;
 
-    int result = func(k, n);
-
-    cout << result << "\n";
+    cout << func(k, n) << "\n";
   }
 
   return 0;
