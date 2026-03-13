@@ -2,10 +2,10 @@
 
 using namespace std;
 
-int dx[8] = {-2, -2, -1, -1, 1, 1, 2, 2};
-int dy[8] = {-1, 1, -2, 2, -2, 2, -1, 1};
-bool visited[301][301];
 int dist[301][301];
+queue<pair<int, int>> que;
+int dx[8] = {2, 1, -1, -2, -2, -1, 1, 2};
+int dy[8] = {1, 2, 2, 1, -1, -2, -2, -1};
 
 int main() {
   ios::sync_with_stdio(false);
@@ -15,36 +15,40 @@ int main() {
   cin >> T;
 
   while (T--) {
-    int I, x, y, p, q;
-    cin >> I >> x >> y >> p >> q;
+    int I;
+    cin >> I;
 
-    queue<pair<int, int> > qe;
+    int x, y;
+    cin >> x >> y;
 
-    qe.emplace(x, y);
-    visited[x][y] = true;
+    int p, q;
+    cin >> p >> q;
 
-    while (!qe.empty()) {
-      auto cur = qe.front(); qe.pop();
-      if (cur.first == p && cur.second == q) {
-        cout << dist[cur.first][cur.second] << "\n";
-        break;
-      }
+    if (x == p && y == q) {
+      cout << 0 << "\n";
+      continue;
+    }
+
+    que.emplace(x, y);
+    dist[x][y] = 0;
+    while (!que.empty()) {
+      auto cur = que.front(); que.pop();
       for (int dir = 0; dir < 8; dir++) {
         int nx = cur.first + dx[dir];
         int ny = cur.second + dy[dir];
         if (nx < 0 || nx >= I || ny < 0 || ny >= I) continue;
-        if (visited[nx][ny]) continue;
-        visited[nx][ny] = true;
+        if (dist[nx][ny] != 0) continue;
         dist[nx][ny] = dist[cur.first][cur.second] + 1;
-        qe.emplace(nx, ny);
+        que.emplace(nx, ny);
+        if (nx == p && ny == q) {
+          cout << dist[nx][ny] << "\n";
+          break;
+        }
       }
     }
 
-    for (int i = 0; i < I; i++) {
-      fill(visited[i], visited[i] + I, false);
-      fill(dist[i], dist[i] + I, 0);
-    }
+    for (int i = 0; i < 301; i++)
+      fill(dist[i], dist[i] + 301, 0);
   }
-
   return 0;
 }
