@@ -15,23 +15,38 @@ add_executable(algorithm_practice main.cpp)
 
 set(SOLUTION_DIRS baekjoon programmers)
 
-function(add_solution_targets)
-    foreach(source IN LISTS ARGN)
-        file(RELATIVE_PATH rel_path "${CMAKE_SOURCE_DIR}" "${source}")
-        string(REPLACE ".cpp" "" target_name "${rel_path}")
-        string(REPLACE "/" "_" target_name "${target_name}")
-        add_executable("${target_name}" "${source}")
+function(make_solution_target_name output_var source)
+    file(RELATIVE_PATH rel_path "${CMAKE_SOURCE_DIR}" "${source}")
+    string(REGEX REPLACE "\\.cpp$" "" target_name "${rel_path}")
+    string(REPLACE "/" "_" target_name "${target_name}")
+    set(${output_var} "${target_name}" PARENT_SCOPE)
+endfunction()
+
+function(add_solution_target source)
+    make_solution_target_name(target_name "${source}")
+
+    add_executable("${target_name}" "${source}")
+    add_custom_target(
+        "run_${target_name}"
+        COMMAND "$<TARGET_FILE:${target_name}>"
+        DEPENDS "${target_name}"
+        WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}"
+        USES_TERMINAL
+        COMMENT "Running ${target_name}"
+    )
+endfunction()
+
+function(add_solution_targets_from_dir dir)
+    if(NOT EXISTS "${CMAKE_SOURCE_DIR}/${dir}")
+        return()
+    endif()
+
+    file(GLOB_RECURSE dir_sources CONFIGURE_DEPENDS "${CMAKE_SOURCE_DIR}/${dir}/*.cpp")
+    foreach(source IN LISTS dir_sources)
+        add_solution_target("${source}")
     endforeach()
 endfunction()
 
-set(SOLUTION_SOURCES)
 foreach(dir IN LISTS SOLUTION_DIRS)
-    if(EXISTS "${CMAKE_SOURCE_DIR}/${dir}")
-        file(GLOB_RECURSE dir_sources CONFIGURE_DEPENDS "${dir}/*.cpp")
-        list(APPEND SOLUTION_SOURCES ${dir_sources})
-    endif()
+    add_solution_targets_from_dir("${dir}")
 endforeach()
-
-if(SOLUTION_SOURCES)
-    add_solution_targets(${SOLUTION_SOURCES})
-endif()
