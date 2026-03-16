@@ -9,20 +9,8 @@ int main() {
   int N, K;
   cin >> N >> K;
 
-  int res;
-  int n = 1;
-  int m = 1;
-  for (int i = 0; i < N; i++) {
-    n *= (i + 1);
-  }
-  for (int i = 0; i < K; i++) {
-    m *= (i + 1);
-  }
-  for (int i = 0; i < N - K; i++) {
-    m *= (i + 1);
-  }
-
-  res = n / m;
+  int res = 1;
+  for (int i = 1; i <= K; i++) res = res * (N + i - K) / i;
 
   cout << res << "\n";
 
