@@ -8,30 +8,31 @@ int main() {
 
   string s; cin >> s;
 
-  int m = s[s.size() - 1] - '0';
   int sum = 0;
-  int weight = 0;
-  for (int i = 0; i < s.size() - 1; i++) {
+  int starIdx = -1;
+  for (int i = 0; i < 12; i++) {
     if (s[i] == '*') {
-      if (i % 2 == 1) {
-        weight = 3;
-      } else {
-        weight = 1;
-      }
+      starIdx = i;
       continue;
     }
+
+    int num = s[i] - '0';
+
     if (i % 2 == 1) {
-      sum += (s[i] - '0') * 3;
-      continue;
+      sum += num * 3;
+    } else {
+      sum += num;
     }
-    sum += (s[i] - '0');
   }
+  int last = s[12] - '0';
+  int weight = starIdx % 2 == 1 ? 3 : 1;
 
   for (int x = 0; x <= 9; x++) {
-    if ((sum + x * weight + m) % 10 == 0) {
+    if ((sum + x * weight + last) % 10 == 0) {
       cout << x << "\n";
       break;
     }
   }
+
   return 0;
 }
