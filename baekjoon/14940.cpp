@@ -11,7 +11,7 @@ int main() {
   ios::sync_with_stdio(false);
   cin.tie(nullptr);
 
-  int n, m; // 2 <= n,m <= 1000
+  int n, m;
   cin >> n >> m;
 
   for (int i = 0; i < n; i++) fill(dist[i], dist[i] + m, -1);
@@ -21,6 +21,9 @@ int main() {
       cin >> board[i][j];
       if (board[i][j] == 2) {
         q.push({i, j});
+        dist[i][j] = 0;
+      }
+      if (board[i][j] == 0) {
         dist[i][j] = 0;
       }
     }
@@ -41,8 +44,7 @@ int main() {
 
   for (int i = 0; i < n; i++) {
     for (int j = 0; j < m; j++) {
-      if (board[i][j] == 0) cout << 0 << " ";
-      else cout << dist[i][j] << " ";
+      cout << dist[i][j] << " ";
     }
     cout << "\n";
   }
